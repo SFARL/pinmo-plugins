@@ -11,6 +11,7 @@ Pinmo is the user's private map of places they have been. Each saved record has 
 
 1. **Call `list_memory_filters` first.** It returns `{ total, cities, tags }`.
    - If `total` is 0, tell the user their Pinmo account has no saved records yet and stop; do not search.
+   - `cities` and `tags` list only values that some record has; records without a city still count in `total`. Do not say all records are in a city from this list alone.
    - `city` in a search must equal one of `cities` exactly. Cities can be stored in Chinese or English ("上海市", "Shanghai"), and the two count as different cities. Map what the user said to the spelling in `cities`; if more than one matches, search each.
    - `tag` must be one of `tags`. Built-in tags are English keys such as `cafe`, `park`, `landmark`; the user's own tags are their own words. Map "咖啡馆" or "coffee" to `cafe`, and so on.
 2. **Call `search_memories`** with the narrowest filters that fit the question:
