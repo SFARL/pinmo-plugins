@@ -56,3 +56,26 @@ test("every skill has a description in its frontmatter", () => {
     assert.ok(description && description.length > 20, `${file}: description`);
   }
 });
+
+test("the Codex manifest matches the Claude manifest and points at the shared files", () => {
+  const claude = readJson(`${PLUGIN_DIR}/.claude-plugin/plugin.json`);
+  const codex = readJson(`${PLUGIN_DIR}/.codex-plugin/plugin.json`);
+  assert.equal(codex.name, claude.name);
+  assert.equal(codex.version, claude.version);
+  assert.equal(codex.skills, "./skills/");
+  assert.equal(codex.mcpServers, "./.mcp.json");
+  for (const key of ["displayName", "shortDescription", "longDescription", "developerName", "category"]) {
+    assert.ok(codex.interface[key], `interface.${key}`);
+  }
+});
+
+test("the Codex marketplace lists the same plugin path as the Claude marketplace", () => {
+  const claude = readJson(".claude-plugin/marketplace.json");
+  const codex = readJson(".agents/plugins/marketplace.json");
+  assert.equal(codex.name, claude.name);
+  const [entry] = codex.plugins;
+  assert.equal(entry.name, "pinmo");
+  assert.deepEqual(entry.source, { source: "local", path: claude.plugins[0].source });
+  assert.equal(entry.policy.installation, "AVAILABLE");
+  assert.ok(entry.category);
+});

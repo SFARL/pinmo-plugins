@@ -1,0 +1,12 @@
+{
+  "name": "pinmo",
+  "interface": { "displayName": "Pinmo" },
+  "plugins": [
+    {
+      "name": "pinmo",
+      "source": { "source": "local", "path": "./plugins/pinmo" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    }
+  ]
+}
