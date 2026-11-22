@@ -2,7 +2,9 @@
   "name": "pinmo",
   "version": "0.1.0",
   "description": "Ask about the places you saved in Pinmo: where you went, when, and what you noted. Read-only.",
-  "author": { "name": "Pinmo" },
+  "author": {
+    "name": "Pinmo"
+  },
   "homepage": "https://pinmo.me",
   "repository": "https://github.com/SFARL/pinmo-plugins",
   "skills": "./skills/",
@@ -13,7 +15,10 @@
     "longDescription": "Look up the places you saved in Pinmo by city, tag, date or keyword, and get a day-by-day review of a trip. Read-only: it reads the time, place, tags and note of your saved records, never your photos, voice notes or drafts, and it cannot change anything.",
     "developerName": "Pinmo",
     "category": "Productivity",
-    "capabilities": ["Search saved places", "Review a trip"],
+    "capabilities": [
+      "Search saved places",
+      "Review a trip"
+    ],
     "websiteURL": "https://pinmo.me",
     "supportURL": "https://github.com/SFARL/pinmo-plugins/issues",
     "privacyPolicyURL": "https://pinmo.me/privacy",
@@ -22,5 +27,6 @@
       "Recap my trip from 2026-10-01 to 2026-10-07.",
       "Which cafes have I saved?"
     ]
-  }
+  },
+  "license": "MIT"
 }
