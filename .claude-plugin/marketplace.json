@@ -1,0 +1,16 @@
+{
+  "name": "pinmo",
+  "owner": {
+    "name": "Pinmo"
+  },
+  "metadata": {
+    "description": "Plugins for Pinmo, a private map of the places you have been."
+  },
+  "plugins": [
+    {
+      "name": "pinmo",
+      "source": "./plugins/pinmo",
+      "description": "Ask Claude about the places you saved in Pinmo: where you went, when, and what you noted. Read-only."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "pinmo": {
+      "type": "http",
+      "url": "https://pinmo.me/mcp"
+    }
+  }
+}
