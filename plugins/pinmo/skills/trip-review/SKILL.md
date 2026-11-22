@@ -10,7 +10,7 @@ Pinmo is the user's private map of places they have been. Each saved record has 
 ## Steps
 
 1. **Pin down the dates.** Get a start and end date from the user's words (`YYYY-MM-DD`, inclusive). If they named only a place ("my Kyoto trip"), search that city without dates first, look at the record times, and confirm the date range with the user before building the review.
-2. **Call `list_memory_filters`.** If `total` is 0, say the account has no saved records and stop. Map the city the user named to the exact spelling in `cities`; cities can be stored in Chinese or English, and the two count as different cities. For a trip across several cities, leave `city` out and rely on the dates.
+2. **Call `list_memory_filters`.** If `total` is 0, say the account has no saved records and stop; do not search. Map the city the user named to the exact spelling in `cities`; cities can be stored in Chinese or English, and the two count as different cities. For a trip across several cities, leave `city` out and rely on the dates.
 3. **Fetch every record in the range** with `search_memories`: `from`, `to`, `city` if it applies, and `limit: 20`. While `nextCursor` is not null, call again with `cursor` set to that exact value and the same filters. Never write or change a cursor yourself.
    - After 5 pages (100 records), stop and ask the user whether to continue or narrow the range. This keeps within the server's rate limit.
 4. **Build the review.**

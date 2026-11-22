@@ -1,6 +1,6 @@
 ---
 name: recall
-description: Look up places the user saved in Pinmo. Use when the user asks where they went, what they did on a date or in a month, whether they have been somewhere, or for a place they noted (a cafe in Tokyo, "that ramen place", "我去过哪""上次在上海去的咖啡馆""去年十月去了哪"). Uses the pinmo server's list_memory_filters and search_memories tools. Read-only.
+description: Look up places the user saved in Pinmo. Use when the user asks where they went, what they did on a date or in a month, whether they have been somewhere, or for a place they noted (a cafe in Tokyo, "that ramen place", "我去过哪""上次在上海去的咖啡馆""去年十月去了哪"). Also use when the user asks to add, edit or delete a Pinmo record, to explain that this is read-only. Uses the pinmo server's list_memory_filters and search_memories tools.
 ---
 
 # Recall from Pinmo
@@ -10,7 +10,7 @@ Pinmo is the user's private map of places they have been. Each saved record has 
 ## Steps
 
 1. **Call `list_memory_filters` first.** It returns `{ total, cities, tags }`.
-   - If `total` is 0, tell the user their Pinmo account has no saved records yet and stop.
+   - If `total` is 0, tell the user their Pinmo account has no saved records yet and stop; do not search.
    - `city` in a search must equal one of `cities` exactly. Cities can be stored in Chinese or English ("上海市", "Shanghai"), and the two count as different cities. Map what the user said to the spelling in `cities`; if more than one matches, search each.
    - `tag` must be one of `tags`. Built-in tags are English keys such as `cafe`, `park`, `landmark`; the user's own tags are their own words. Map "咖啡馆" or "coffee" to `cafe`, and so on.
 2. **Call `search_memories`** with the narrowest filters that fit the question:
