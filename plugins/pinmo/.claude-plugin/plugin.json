@@ -3,5 +3,9 @@
   "version": "0.1.0",
   "description": "Ask Claude about the places you saved in Pinmo: where you went, when, and what you noted. Read-only.",
   "homepage": "https://pinmo.me",
-  "author": { "name": "Pinmo" }
+  "author": {
+    "name": "Pinmo"
+  },
+  "privacyPolicyUrl": "https://pinmo.me/privacy",
+  "repository": "https://github.com/SFARL/pinmo-plugins"
 }
