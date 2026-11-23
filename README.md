@@ -63,12 +63,11 @@ Privacy notice: https://pinmo.me/privacy
 The plugin lives in `plugins/pinmo/`. Claude Code reads `.claude-plugin/` (marketplace and plugin manifests); Codex reads `.agents/plugins/marketplace.json` and `plugins/pinmo/.codex-plugin/plugin.json`. Both share `plugins/pinmo/.mcp.json` and `plugins/pinmo/skills/`.
 
 ```
-npm test
 claude plugin validate .
 claude plugin validate ./plugins/pinmo
 ```
 
-Releases follow [`.claude/skills/release-plugin/SKILL.md`](.claude/skills/release-plugin/SKILL.md).
+This repository holds only the plugin itself (Markdown, JSON, license). The maintainers' consistency checks and release steps are kept with the Pinmo service's source.
 
 ## Changelog
 
