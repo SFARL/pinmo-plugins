@@ -10,7 +10,8 @@
     {
       "name": "pinmo",
       "source": "./plugins/pinmo",
-      "description": "Ask Claude about the places you saved in Pinmo: where you went, when, and what you noted. Read-only."
+      "version": "0.2.0",
+      "description": "Ask Claude about the places you saved in Pinmo, and turn a folder of photos into draft cards with the pinmo CLI. You confirm everything on pinmo.me."
     }
   ]
 }
