@@ -35,20 +35,20 @@ The last command opens Pinmo in your browser; sign in there and allow Codex to r
 - Three skills:
   - `recall` – look up places by city, tag, date or keyword.
   - `trip-review` – a day-by-day review of a trip or a range of dates.
-  - `import-folder` – import a folder of JPEGs as draft cards with the `pinmo` CLI, name the places the agent recognizes, and list the ones it is unsure of.
+  - `import-folder` – import a folder of JPEGs as draft cards (macOS and Windows), name the places the agent recognizes, and list the ones it is unsure of.
 
 The agent uses the skills on its own when your request fits. In Claude Code you can also call them as `/pinmo:recall`, `/pinmo:trip-review` and `/pinmo:import-folder`.
 
 ## Importing a photo folder
 
-`import-folder` runs the `pinmo` command-line tool, which is **not publicly distributed yet**; without it the skill stops and points you to the batch import on pinmo.me. When the CLI is installed (`pinmo` on your `PATH`, or `PINMO_CLI` set to the built `pinmo.mjs`; Node 22 or later):
+`import-folder` works on **macOS** and **Windows 10 / 11** with nothing to install. The skill carries a small import tool as text: on macOS it runs with JavaScript for Automation (`osascript`), on Windows with Windows PowerShell. Both use only what ships with the system. On other systems the skill points you to the batch import on pinmo.me.
 
-1. `pinmo login` once: your browser opens Pinmo; allow "Pinmo CLI" to import photos.
-2. Ask the agent to import a folder. The CLI reads capture time and GPS on your computer and uploads two resized copies with EXIF removed; the original files stay on your computer.
+1. The first time, your browser opens Pinmo; allow "Pinmo CLI" to import photos. (The tool shares this login with the `pinmo` command-line tool.)
+2. Ask the agent to import a folder. The tool reads capture time and GPS on your computer and uploads two resized, upright copies with EXIF removed; the original files stay on your computer.
 3. With `--agent-fills` (the skill's default when you ask it to name places), Pinmo does not run its own model on that import: the agent looks at the photos instead, so they are seen by the agent and the company that runs it.
 4. Open the review address the agent gives you, then confirm and share the cards yourself.
 
-Revoke the CLI with `pinmo logout`, or revoke "Pinmo CLI" under Data and account on pinmo.me.
+Revoke this computer's import access by asking the agent to log out of Pinmo, or revoke "Pinmo CLI" under Data and account on pinmo.me.
 
 Sign-in uses OAuth with Client ID Metadata Documents: Pinmo recognizes Claude Code and Codex by their published client documents, so there is no client to register and no API key.
 
@@ -71,6 +71,7 @@ This repository holds only the plugin itself (Markdown, JSON, license). The main
 
 ## Changelog
 
+- **0.3.0** – `import-folder` no longer needs the `pinmo` CLI: it carries its own import tool for macOS (JavaScript for Automation) and Windows (Windows PowerShell), using only what ships with the system. Verified end to end in Claude Code on macOS against Pinmo's staging site; the Windows tool is verified by automated checks. Codex verification is done separately on the Codex side.
 - **0.2.1** – The Claude Code marketplace is now named `pinmo-plugins` (install with `pinmo@pinmo-plugins`). If you added it before, remove the old one with `/plugin marketplace remove pinmo` and add it again. Codex is unchanged.
 - **0.2.0** – `import-folder` skill (folder import with the `pinmo` CLI); `recall` sends add-photo requests there. Verified in Claude Code only; Codex verification of 0.2.0 is done separately on the Codex side.
 - **0.1.0** – `recall` and `trip-review` over the read-only `pinmo` MCP server.
