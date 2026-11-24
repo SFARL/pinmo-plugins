@@ -1,6 +1,6 @@
 # Pinmo plugins
 
-A plugin for [Pinmo](https://pinmo.me), a private map of the places you have been, that works in **Claude Code** and **Codex**. With it, the agent can answer questions such as "where did I eat in Tokyo last October?" or "recap my Kyoto trip" from the records you saved in Pinmo, and, in Claude Code, turn a folder of photos on your computer into draft cards ("organize this folder into my map and tell me which places you are unsure of").
+A plugin for [Pinmo](https://pinmo.me), a private map of the places you have been, that works in **Claude Code** and **Codex**. Ask about your saved places, recap a trip, or turn a folder of photos on your Mac or Windows PC into draft cards from a local session.
 
 Reading is read-only: the agent can read the time, place, tags and note of your saved records. It cannot see your photos, voice notes, drafts or records others shared with you, and it cannot change them. Importing only creates drafts; you confirm, edit and share them on pinmo.me.
 
@@ -24,10 +24,11 @@ Needs a Codex CLI with plugin support (tested with 0.171.0; `codex --version` to
 ```
 codex plugin marketplace add SFARL/pinmo-plugins
 codex plugin add pinmo@pinmo
-codex mcp login pinmo
 ```
 
-The last command opens Pinmo in your browser; sign in there and allow Codex to read your records. In the Codex app, add the marketplace the same way and install Pinmo from the Plugins directory, then start a new chat.
+Start a new local Codex session after installing. Run `codex mcp login pinmo` to let Codex query your saved records. To import photos, ask Codex to import a local folder into Pinmo and follow the separate Pinmo authorization in your browser when prompted.
+
+Import requires a local shell with access to the selected folder and to Pinmo. If the sandbox blocks access, use the session's normal approval controls or use **Batch import** on pinmo.me. Folder import is verified end to end in Codex CLI on macOS. On Windows, the PowerShell importer passed its automated tests with a stand-in server. An end-to-end Codex test on Windows is still pending.
 
 ## What it adds
 
@@ -41,9 +42,9 @@ The agent uses the skills on its own when your request fits. In Claude Code you 
 
 ## Importing a photo folder
 
-`import-folder` works on **macOS** and **Windows 10 / 11** with nothing to install. The skill carries a small import tool as text: on macOS it runs with JavaScript for Automation (`osascript`), on Windows with Windows PowerShell. Both use only what ships with the system. On other systems the skill points you to the batch import on pinmo.me.
+`import-folder` uses JavaScript for Automation (`osascript`) on **macOS** and Windows PowerShell on **Windows 10 / 11**. These tools ship with their respective systems. On other systems, use **Batch import** on pinmo.me.
 
-1. The first time, your browser opens Pinmo; allow "Pinmo CLI" to import photos. (The tool shares this login with the `pinmo` command-line tool.)
+1. The first time, your browser opens Pinmo and asks you to allow "Pinmo CLI" to import photos. The import tool shares this login with the standalone `pinmo` CLI.
 2. Ask the agent to import a folder. The tool reads capture time and GPS on your computer and uploads two resized, upright copies with EXIF removed; the original files stay on your computer.
 3. With `--agent-fills` (the skill's default when you ask it to name places), Pinmo does not run its own model on that import: the agent looks at the photos instead, so they are seen by the agent and the company that runs it.
 4. Open the review address the agent gives you, then confirm and share the cards yourself.
@@ -71,6 +72,7 @@ This repository holds only the plugin itself (Markdown, JSON, license). The main
 
 ## Changelog
 
+- **0.3.2** – Describe folder import in Codex and clarify its local execution and first-use authorization. Verified the GitHub plugin's import flow in Codex CLI on macOS against Pinmo staging.
 - **0.3.1** – Fix the Windows import tool: after the first request it lost its connection to Pinmo, so login and import failed with "Could not reach". The Windows tool now passes the same automated checks as the macOS one, run on Windows with Windows PowerShell 5.1 against a stand-in Pinmo site; it has not yet been run end to end against Pinmo itself.
 - **0.3.0** – `import-folder` no longer needs the `pinmo` CLI: it carries its own import tool for macOS (JavaScript for Automation) and Windows (Windows PowerShell), using only what ships with the system. Verified end to end in Claude Code on macOS against Pinmo's staging site. The Windows tool passes static checks but has not been run on Windows yet. Codex verification is done separately on the Codex side.
 - **0.2.1** – The Claude Code marketplace is now named `pinmo-plugins` (install with `pinmo@pinmo-plugins`). If you added it before, remove the old one with `/plugin marketplace remove pinmo` and add it again. Codex is unchanged.

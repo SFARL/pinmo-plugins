@@ -7,11 +7,11 @@ description: Turn a folder of photos on this computer (macOS or Windows) into dr
 
 This skill imports a folder of photos into the user's Pinmo account as **draft** cards. It carries a small tool written for what the computer already has: JavaScript for Automation on macOS (`macos.md`), Windows PowerShell on Windows (`windows.md`). Nothing needs installing. The tool reads each photo's capture time and GPS on this computer, then uploads two resized copies with all EXIF removed. The original files never leave the computer. You can then look at each draft's photos yourself and suggest a place name. The user confirms, edits and shares the cards on the Pinmo website; the tool cannot confirm, publish, share or delete anything.
 
-The tool has the same commands and output as the `pinmo` command-line tool. Below, `pinmo` means the command from step 0. This skill does not use the `pinmo` MCP server.
+The tool has the same commands and output as the `pinmo` command-line tool. Below, `pinmo` means the command from step 0. The import uses its own browser authorization, separate from the Pinmo MCP login for searching saved places.
 
 ## 0. Get the tool
 
-`<skill folder>` below is this skill's base directory, shown when the skill was loaded. Run the commands for this computer's system, and note the path the last line prints: it is the tool for the rest of this session.
+Use a local Codex or Claude Code session with shell access to the selected folder. In Codex, resolve `<skill folder>` to the directory containing the installed `import-folder/SKILL.md`, using the path in the loaded skill entry. Run the commands for the current system, then use the absolute path printed by the last line in each tool call.
 
 **macOS** (in a shell such as zsh or bash):
 
@@ -19,7 +19,7 @@ The tool has the same commands and output as the `pinmo` command-line tool. Belo
 D="$(mktemp -d)" && awk '/^```js pinmo\r?$/{f=1;next} f&&/^```\r?$/{exit} f' "<skill folder>/macos.md" > "$D/pinmo.js" && echo "$D/pinmo.js"
 ```
 
-Then `pinmo <command>` means `osascript -l JavaScript "<that path>" <command>`.
+Then `pinmo <command>` means `/usr/bin/osascript -l JavaScript "<that path>" <command>`.
 
 **Windows**, when your shell is Git Bash (Claude Code on Windows):
 
@@ -41,6 +41,8 @@ On any other system (Linux, a phone, a sandbox without a shell), or when `osascr
 
 Every command takes `--origin <url>`; leave it out (the default is `https://pinmo.me`) unless the user names another Pinmo site.
 
+If local folder access, the OAuth callback or Pinmo network access is blocked by the session, use its usual tool approval flow when available. If access is unavailable, offer the website import.
+
 ## 1. Check the folder and tell the user what will happen
 
 - Only `.jpg` / `.jpeg` files directly in the folder are imported (no subfolders). Other files, including HEIC, are skipped and counted; the user can export HEIC as JPEG first. At most 200 JPEGs per import; for more, ask the user to split the folder.
@@ -50,9 +52,7 @@ Every command takes `--origin <url>`; leave it out (the default is `https://pinm
 
 ## 2. Log in (once per computer)
 
-Run `pinmo login`. It prints an address and opens the browser. The user signs in to Pinmo there and clicks **Allow** on the page that asks to let Pinmo CLI import photos (the tool uses the CLI's login). The command waits up to five minutes and prints `Logged in to <site>.` If the browser does not open, run `pinmo login --no-browser` and give the user the printed address. The login is shared with the `pinmo` CLI, so a computer that already ran `pinmo login` skips this step.
-
-Skip this step if a later command works without it. If any command prints `Run pinmo login again`, run this step again and then retry that command.
+Try the import first so an existing import login can be reused. If the tool asks you to run `pinmo login`, start that command once. It prints the authorization URL, opens the browser and waits up to five minutes. Give the user the URL if the browser does not open, keep the command running and wait for `Logged in to <site>.` The user signs in and clicks **Allow**. Then retry the import. On a headless machine, start with `pinmo login --no-browser` and provide the printed URL.
 
 ## 3. Import
 

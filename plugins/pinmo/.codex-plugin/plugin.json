@@ -1,7 +1,7 @@
 {
   "name": "pinmo",
-  "version": "0.3.1",
-  "description": "Ask about the places you saved in Pinmo: where you went, when, and what you noted. Read-only.",
+  "version": "0.3.2",
+  "description": "Find saved places and import local photo folders into Pinmo as drafts.",
   "author": {
     "name": "Pinmo"
   },
@@ -11,13 +11,14 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Pinmo",
-    "shortDescription": "Ask about the places you saved in Pinmo",
-    "longDescription": "Look up the places you saved in Pinmo by city, tag, date or keyword, and get a day-by-day review of a trip. Read-only: it reads the time, place, tags and note of your saved records, never your photos, voice notes or drafts, and it cannot change anything.",
+    "shortDescription": "Find places and import photos into Pinmo",
+    "longDescription": "Look up your saved places by city, tag, date, or keyword and review a trip day by day. In a local session on macOS or Windows, authorize folder import to upload resized JPEG copies as draft cards. Open Pinmo to confirm and share them.",
     "developerName": "Pinmo",
     "category": "Productivity",
     "capabilities": [
       "Search saved places",
-      "Review a trip"
+      "Review a trip",
+      "Import photo folders"
     ],
     "websiteURL": "https://pinmo.me",
     "supportURL": "https://github.com/SFARL/pinmo-plugins/issues",
