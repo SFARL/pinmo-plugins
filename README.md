@@ -43,6 +43,8 @@ The agent uses the skills on its own when your request fits. In Claude Code you 
 
 `import-folder` works on **macOS** and **Windows 10 / 11** with nothing to install. The skill carries a small import tool as text: on macOS it runs with JavaScript for Automation (`osascript`), on Windows with Windows PowerShell. Both use only what ships with the system. On other systems the skill points you to the batch import on pinmo.me.
 
+The Windows tool has not been run on a Windows computer yet. If it fails there, use the batch import on pinmo.me, and please open an issue with the message it printed.
+
 1. The first time, your browser opens Pinmo; allow "Pinmo CLI" to import photos. (The tool shares this login with the `pinmo` command-line tool.)
 2. Ask the agent to import a folder. The tool reads capture time and GPS on your computer and uploads two resized, upright copies with EXIF removed; the original files stay on your computer.
 3. With `--agent-fills` (the skill's default when you ask it to name places), Pinmo does not run its own model on that import: the agent looks at the photos instead, so they are seen by the agent and the company that runs it.
@@ -71,7 +73,7 @@ This repository holds only the plugin itself (Markdown, JSON, license). The main
 
 ## Changelog
 
-- **0.3.0** – `import-folder` no longer needs the `pinmo` CLI: it carries its own import tool for macOS (JavaScript for Automation) and Windows (Windows PowerShell), using only what ships with the system. Verified end to end in Claude Code on macOS against Pinmo's staging site; the Windows tool is verified by automated checks. Codex verification is done separately on the Codex side.
+- **0.3.0** – `import-folder` no longer needs the `pinmo` CLI: it carries its own import tool for macOS (JavaScript for Automation) and Windows (Windows PowerShell), using only what ships with the system. Verified end to end in Claude Code on macOS against Pinmo's staging site. The Windows tool passes static checks but has not been run on Windows yet. Codex verification is done separately on the Codex side.
 - **0.2.1** – The Claude Code marketplace is now named `pinmo-plugins` (install with `pinmo@pinmo-plugins`). If you added it before, remove the old one with `/plugin marketplace remove pinmo` and add it again. Codex is unchanged.
 - **0.2.0** – `import-folder` skill (folder import with the `pinmo` CLI); `recall` sends add-photo requests there. Verified in Claude Code only; Codex verification of 0.2.0 is done separately on the Codex side.
 - **0.1.0** – `recall` and `trip-review` over the read-only `pinmo` MCP server.
