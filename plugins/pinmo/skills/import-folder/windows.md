@@ -260,8 +260,9 @@ function Get-ModifiedMs([string]$path) {
 
 $Handler = New-Object System.Net.Http.HttpClientHandler
 $Handler.AllowAutoRedirect = $false
-$Client = New-Object System.Net.Http.HttpClient($Handler)
-$Client.Timeout = [TimeSpan]::FromMinutes(2)
+# Script scope, named apart from any local: PowerShell names ignore case and functions see their callers' locals.
+$script:PinmoHttp = New-Object System.Net.Http.HttpClient($Handler)
+$script:PinmoHttp.Timeout = [TimeSpan]::FromMinutes(2)
 
 function Invoke-Pinmo([string]$method, [string]$url, $token, $json, $form, [byte[]]$jpeg) {
   $request = New-Object System.Net.Http.HttpRequestMessage((New-Object System.Net.Http.HttpMethod $method), $url)
@@ -279,7 +280,7 @@ function Invoke-Pinmo([string]$method, [string]$url, $token, $json, $form, [byte
     $request.Content = New-Object System.Net.Http.ByteArrayContent(,(New-Object byte[] 0))
   }
   try {
-    $response = $Client.SendAsync($request).GetAwaiter().GetResult()
+    $response = $script:PinmoHttp.SendAsync($request).GetAwaiter().GetResult()
     $bytes = $response.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult()
   } catch {
     $site = ([Uri]$url).GetLeftPart([UriPartial]::Authority)
@@ -329,10 +330,10 @@ function Invoke-Agent([string]$method, [string]$path, $json, [byte[]]$jpeg) {
 
 # ---------- login ----------
 
-function Send-Answer($client, [string]$status, [string]$body) {
+function Send-Answer($tcp, [string]$status, [string]$body) {
   $bytes = $Utf8.GetBytes($body)
   $head = "HTTP/1.1 $status`r`nContent-Type: text/plain; charset=utf-8`r`nConnection: close`r`nContent-Length: $($bytes.Length)`r`n`r`n"
-  $stream = $client.GetStream()
+  $stream = $tcp.GetStream()
   $headBytes = [Text.Encoding]::ASCII.GetBytes($head)
   $stream.Write($headBytes, 0, $headBytes.Length)
   $stream.Write($bytes, 0, $bytes.Length)
@@ -344,9 +345,9 @@ function Wait-Callback($listener, [int]$timeoutMs) {
   $deadline = [DateTime]::UtcNow.AddMilliseconds($timeoutMs)
   while ([DateTime]::UtcNow -lt $deadline) {
     if (-not $listener.Pending()) { Start-Sleep -Milliseconds 100; continue }
-    $client = $listener.AcceptTcpClient()
+    $tcp = $listener.AcceptTcpClient()
     try {
-      $stream = $client.GetStream()
+      $stream = $tcp.GetStream()
       $stream.ReadTimeout = 2000
       $buffer = New-Object byte[] 8192
       $text = ''
@@ -362,7 +363,7 @@ function Wait-Callback($listener, [int]$timeoutMs) {
       $line = ($text -split "`r`n")[0]
       if ($line -match '^GET /callback(?:\?([^ ]*))? HTTP/') {
         $query = $Matches[1]
-        Send-Answer $client '200 OK' $CallbackPage
+        Send-Answer $tcp '200 OK' $CallbackPage
         $params = @{}
         if ($query) {
           foreach ($pair in $query.Split('&')) {
@@ -375,18 +376,18 @@ function Wait-Callback($listener, [int]$timeoutMs) {
         }
         return $params
       }
-      Send-Answer $client '404 Not Found' 'Not found'
+      Send-Answer $tcp '404 Not Found' 'Not found'
     } finally {
-      $client.Close()
+      $tcp.Close()
     }
   }
   return $null
 }
 
 function Invoke-Login([string]$origin, [bool]$openBrowser) {
-  $client = Invoke-Pinmo 'GET' ($origin + '/oauth/clients/pinmo-cli') $null $null $null $null
+  $clientInfo = Invoke-Pinmo 'GET' ($origin + '/oauth/clients/pinmo-cli') $null $null $null $null
   $clientId = $null
-  if ($client.Status -eq 200 -and $null -ne $client.Body) { $clientId = [string]$client.Body.client_id }
+  if ($clientInfo.Status -eq 200 -and $null -ne $clientInfo.Body) { $clientId = [string]$clientInfo.Body.client_id }
   if (-not $clientId) { Stop-Pinmo $LoginMessages.client 1 }
   $verifier = New-RandomBase64Url 32
   $state = New-RandomBase64Url 24

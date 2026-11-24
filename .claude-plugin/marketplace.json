@@ -10,7 +10,7 @@
     {
       "name": "pinmo",
       "source": "./plugins/pinmo",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "description": "Ask Claude about the places you saved in Pinmo, and turn a folder of photos on your Mac or Windows PC into draft cards. You confirm everything on pinmo.me."
     }
   ]
