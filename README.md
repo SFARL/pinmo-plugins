@@ -1,8 +1,8 @@
 # Pinmo plugins
 
-A plugin for [Pinmo](https://pinmo.me), a private map of the places you have been, that works in **Claude Code** and **Codex**. With it, the agent can answer questions such as "where did I eat in Tokyo last October?" or "recap my Kyoto trip" from the records you saved in Pinmo, and, in Claude Code, turn a folder of photos on your computer into draft cards ("organize this folder into my map and tell me which places you are unsure of").
+A plugin for [Pinmo](https://pinmo.me), a private map of the places you have been, that works in **Claude Code** and **Codex**. With it, the agent can answer questions such as "where did I eat in Tokyo last October?" or "recap my Kyoto trip" from the records you saved in Pinmo, and walk you through importing a folder of photos with the batch import on pinmo.me.
 
-Reading is read-only: the agent can read the time, place, tags and note of your saved records. It cannot see your photos, voice notes, drafts or records others shared with you, and it cannot change them. Importing only creates drafts; you confirm, edit and share them on pinmo.me.
+Reading is read-only: the agent can read the time, place, tags and note of your saved records. It cannot see your photos, voice notes, drafts or records others shared with you, and it cannot change them. Imports happen on pinmo.me and only create drafts; you confirm, edit and share them there.
 
 ## Install in Claude Code
 
@@ -35,20 +35,13 @@ The last command opens Pinmo in your browser; sign in there and allow Codex to r
 - Three skills:
   - `recall` – look up places by city, tag, date or keyword.
   - `trip-review` – a day-by-day review of a trip or a range of dates.
-  - `import-folder` – import a folder of JPEGs as draft cards (macOS and Windows), name the places the agent recognizes, and list the ones it is unsure of.
+  - `import-folder` – guide you through importing a folder of photos with the batch import on pinmo.me.
 
 The agent uses the skills on its own when your request fits. In Claude Code you can also call them as `/pinmo:recall`, `/pinmo:trip-review` and `/pinmo:import-folder`.
 
 ## Importing a photo folder
 
-`import-folder` works on **macOS** and **Windows 10 / 11** with nothing to install. The skill carries a small import tool as text: on macOS it runs with JavaScript for Automation (`osascript`), on Windows with Windows PowerShell. Both use only what ships with the system. On other systems the skill points you to the batch import on pinmo.me.
-
-1. The first time, your browser opens Pinmo; allow "Pinmo CLI" to import photos. (The tool shares this login with the `pinmo` command-line tool.)
-2. Ask the agent to import a folder. The tool reads capture time and GPS on your computer and uploads two resized, upright copies with EXIF removed; the original files stay on your computer.
-3. With `--agent-fills` (the skill's default when you ask it to name places), Pinmo does not run its own model on that import: the agent looks at the photos instead, so they are seen by the agent and the company that runs it.
-4. Open the review address the agent gives you, then confirm and share the cards yourself.
-
-Revoke this computer's import access by asking the agent to log out of Pinmo, or revoke "Pinmo CLI" under Data and account on pinmo.me.
+This edition of the plugin does not upload photos. `import-folder` explains how to use **Batch import** on pinmo.me: the website reads capture time and GPS in your browser, uploads resized copies, and makes draft cards for you to review and confirm.
 
 Sign-in uses OAuth with Client ID Metadata Documents: Pinmo recognizes Claude Code and Codex by their published client documents, so there is no client to register and no API key.
 
@@ -71,6 +64,7 @@ This repository holds only the plugin itself (Markdown, JSON, license). The main
 
 ## Changelog
 
+- **0.3.1 (directory edition, branch `directory`)** – Same as 0.3.1, except that `import-folder` carries no import tool and guides you to the batch import on pinmo.me. This is the edition submitted to the Claude plugin directory.
 - **0.3.1** – Fix the Windows import tool: after the first request it lost its connection to Pinmo, so login and import failed with "Could not reach". The Windows tool now passes the same automated checks as the macOS one, run on Windows with Windows PowerShell 5.1 against a stand-in Pinmo site; it has not yet been run end to end against Pinmo itself.
 - **0.3.0** – `import-folder` no longer needs the `pinmo` CLI: it carries its own import tool for macOS (JavaScript for Automation) and Windows (Windows PowerShell), using only what ships with the system. Verified end to end in Claude Code on macOS against Pinmo's staging site. The Windows tool passes static checks but has not been run on Windows yet. Codex verification is done separately on the Codex side.
 - **0.2.1** – The Claude Code marketplace is now named `pinmo-plugins` (install with `pinmo@pinmo-plugins`). If you added it before, remove the old one with `/plugin marketplace remove pinmo` and add it again. Codex is unchanged.
