@@ -8,12 +8,12 @@ Reading is read-only: the agent can read the time, place, tags and note of your 
 
 ```
 /plugin marketplace add SFARL/pinmo-plugins
-/plugin install pinmo@pinmo
+/plugin install pinmo@pinmo-plugins
 ```
 
 Then run `/mcp`, choose `pinmo`, and sign in. Your browser opens Pinmo; sign in there and allow Claude Code to read your records.
 
-From a shell, the same steps are `claude plugin marketplace add SFARL/pinmo-plugins` and `claude plugin install pinmo@pinmo`.
+From a shell, the same steps are `claude plugin marketplace add SFARL/pinmo-plugins` and `claude plugin install pinmo@pinmo-plugins`.
 
 If `/mcp` later shows that `pinmo` needs authentication again (for example after you sign in to Claude Code again with `/login`), sign in once more the same way.
 
@@ -71,5 +71,6 @@ This repository holds only the plugin itself (Markdown, JSON, license). The main
 
 ## Changelog
 
+- **0.2.1** – The Claude Code marketplace is now named `pinmo-plugins` (install with `pinmo@pinmo-plugins`). If you added it before, remove the old one with `/plugin marketplace remove pinmo` and add it again. Codex is unchanged.
 - **0.2.0** – `import-folder` skill (folder import with the `pinmo` CLI); `recall` sends add-photo requests there. Verified in Claude Code only; Codex verification of 0.2.0 is done separately on the Codex side.
 - **0.1.0** – `recall` and `trip-review` over the read-only `pinmo` MCP server.

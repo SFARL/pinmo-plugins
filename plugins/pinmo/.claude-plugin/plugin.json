@@ -1,6 +1,6 @@
 {
   "name": "pinmo",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Ask Claude about the places you saved in Pinmo, and turn a folder of photos into draft cards with the pinmo CLI. You confirm everything on pinmo.me.",
   "homepage": "https://pinmo.me",
   "author": {
