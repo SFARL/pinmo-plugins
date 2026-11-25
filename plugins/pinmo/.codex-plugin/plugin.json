@@ -1,6 +1,6 @@
 {
   "name": "pinmo",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Find saved places and import local photo folders into Pinmo as drafts.",
   "author": {
     "name": "Pinmo"

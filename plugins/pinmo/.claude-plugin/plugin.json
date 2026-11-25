@@ -1,7 +1,7 @@
 {
   "name": "pinmo",
-  "version": "0.3.2",
-  "description": "Ask Claude about the places you saved in Pinmo, and turn a folder of photos on your Mac or Windows PC into draft cards. You confirm everything on pinmo.me.",
+  "version": "0.4.0",
+  "description": "Ask Claude about the places you saved in Pinmo, note a moment as a draft, and turn a folder of photos on your Mac or Windows PC into draft cards. You confirm everything on pinmo.me.",
   "homepage": "https://pinmo.me",
   "author": {
     "name": "Pinmo"

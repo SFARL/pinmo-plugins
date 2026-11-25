@@ -1,8 +1,8 @@
 # Pinmo plugins
 
-A plugin for [Pinmo](https://pinmo.me), a private map of the places you have been, that works in **Claude Code** and **Codex**. Ask about your saved places, recap a trip, or turn a folder of photos on your Mac or Windows PC into draft cards from a local session.
+A plugin for [Pinmo](https://pinmo.me), a private map of the places you have been, that works in **Claude Code** and **Codex**. Ask about your saved places, recap a trip, note a moment as a draft, or turn a folder of photos on your Mac or Windows PC into draft cards from a local session.
 
-Reading is read-only: the agent can read the time, place, tags and note of your saved records. It cannot see your photos, voice notes, drafts or records others shared with you, and it cannot change them. Importing only creates drafts; you confirm, edit and share them on pinmo.me.
+Reading is read-only: the agent can read the time, place, tags and note of your saved records. It cannot see your photos, voice notes, drafts or records others shared with you, and it cannot change them. Noting and importing only create drafts; you confirm, edit and share them on pinmo.me.
 
 ## Install in Claude Code
 
@@ -11,7 +11,9 @@ Reading is read-only: the agent can read the time, place, tags and note of your 
 /plugin install pinmo@pinmo-plugins
 ```
 
-Then run `/mcp`, choose `pinmo`, and sign in. Your browser opens Pinmo; sign in there and allow Claude Code to read your records.
+Then run `/mcp`, choose `pinmo`, and sign in. Your browser opens Pinmo; sign in there and allow Claude Code to read your records and create drafts.
+
+If you connected before version 0.4.0, Claude Code can only read: to let it note drafts, run `/mcp`, choose `pinmo` and sign in again (or `claude mcp logout pinmo`, then `claude mcp login pinmo`), and allow drafts on the consent page.
 
 From a shell, the same steps are `claude plugin marketplace add SFARL/pinmo-plugins` and `claude plugin install pinmo@pinmo-plugins`.
 
@@ -32,13 +34,18 @@ Import requires a local shell with access to the selected folder and to Pinmo. I
 
 ## What it adds
 
-- The `pinmo` MCP server (`https://pinmo.me/mcp`) with two tools: `list_memory_filters` and `search_memories`.
-- Three skills:
+- The `pinmo` MCP server (`https://pinmo.me/mcp`) with two read tools, `list_memory_filters` and `search_memories`, and `create_note_draft`, which creates a draft without photos.
+- Four skills:
   - `recall` – look up places by city, tag, date or keyword.
   - `trip-review` – a day-by-day review of a trip or a range of dates.
+  - `note-draft` – note a moment you describe ("we had hotpot at Haidilao last night") as a draft: some text, optionally a place name and a time.
   - `import-folder` – import a folder of JPEGs as draft cards (macOS and Windows), name the places the agent recognizes, and list the ones it is unsure of.
 
-The agent uses the skills on its own when your request fits. In Claude Code you can also call them as `/pinmo:recall`, `/pinmo:trip-review` and `/pinmo:import-folder`.
+The agent uses the skills on its own when your request fits. In Claude Code you can also call them as `/pinmo:recall`, `/pinmo:trip-review`, `/pinmo:note-draft` and `/pinmo:import-folder`.
+
+## Noting a draft
+
+Ask the agent to note something ("记一下：昨晚在海底捞吃火锅"). It sends Pinmo the text and, if you mentioned them, the place name and the time. That text goes to Pinmo from the agent, so the company behind the agent has seen it too. Pinmo saves it as a draft without photos and shows it in your stream on pinmo.me, marked with the agent's name. The place name only starts the place search: you pick the exact place and confirm the draft yourself, and until then it is not a saved record. The agent cannot confirm, change, share or delete records. Each account can receive a limited number of agent drafts per day.
 
 ## Importing a photo folder
 
@@ -71,6 +78,8 @@ claude plugin validate ./plugins/pinmo
 This repository holds only the plugin itself (Markdown, JSON, license). The maintainers' consistency checks and release steps are kept with the Pinmo service's source.
 
 ## Changelog
+
+- **0.4.0** – `note-draft` skill: note a moment as a draft record without photos through the `pinmo` server's new `create_note_draft` tool; you confirm it on pinmo.me. Connections made before 0.4.0 can only read until you sign in again. `recall` and `trip-review` send requests to add a record to it. Verified in Claude Code against Pinmo's staging site.
 
 - **0.3.2** – Describe folder import in Codex and clarify its local execution and first-use authorization. Verified the GitHub plugin's import flow in Codex CLI on macOS against Pinmo staging.
 - **0.3.1** – Fix the Windows import tool: after the first request it lost its connection to Pinmo, so login and import failed with "Could not reach". The Windows tool now passes the same automated checks as the macOS one, run on Windows with Windows PowerShell 5.1 against a stand-in Pinmo site; it has not yet been run end to end against Pinmo itself.

@@ -1,11 +1,11 @@
 ---
 name: recall
-description: Look up places the user saved in Pinmo. Use when the user asks where they went, what they did on a date or in a month, whether they have been somewhere, or for a place they noted (a cafe in Tokyo, "that ramen place", "我去过哪""上次在上海去的咖啡馆""去年十月去了哪"). Also use when the user asks to edit or delete a Pinmo record, to explain that this is read-only (importing a folder of photos is the import-folder skill). Uses the pinmo server's list_memory_filters and search_memories tools.
+description: Look up places the user saved in Pinmo. Use when the user asks where they went, what they did on a date or in a month, whether they have been somewhere, or for a place they noted (a cafe in Tokyo, "that ramen place", "我去过哪""上次在上海去的咖啡馆""去年十月去了哪"). Also use when the user asks to edit or delete a Pinmo record, to explain that this is read-only (noting something new is the note-draft skill; importing a folder of photos is the import-folder skill). Uses the pinmo server's list_memory_filters and search_memories tools.
 ---
 
 # Recall from Pinmo
 
-Pinmo is the user's private map of places they have been. Each saved record has a local time, a place (name, city, tags) and an optional note. The `pinmo` MCP server gives read-only access through two tools: `list_memory_filters` and `search_memories`.
+Pinmo is the user's private map of places they have been. Each saved record has a local time, a place (name, city, tags) and an optional note. The `pinmo` MCP server reads saved records through two read-only tools: `list_memory_filters` and `search_memories`.
 
 ## Steps
 
@@ -32,7 +32,7 @@ Say which filters you used, then suggest loosening them: drop `tag`, try the cit
 ## Rules
 
 - Use only the `pinmo` server for this. If a call fails, report the failure; do not answer from another server or from memory.
-- The tools are read-only. If the user wants to edit or delete a record, say the plugin cannot do that and point them to https://pinmo.me. To add photos from a folder on this computer, use the import-folder skill.
+- These tools are read-only. If the user wants to edit or delete a record, say the plugin cannot do that and point them to https://pinmo.me. To note something new, use the note-draft skill; to add photos from a folder on this computer, use the import-folder skill.
 - If a call fails with an authorization error (401, `invalid_token`), tell the user to sign in to the `pinmo` server again: in Claude Code run `/mcp` and choose `pinmo`; in Codex run `codex mcp login pinmo`.
 - If a call returns `rate_limited`, tell the user to wait a minute. Do not retry in a loop.
 - The notes are the user's private writing. Do not copy them into files or send them anywhere else unless the user asks.

@@ -5,7 +5,7 @@ description: Write a day-by-day review of a trip or a stretch of dates from the 
 
 # Trip review from Pinmo
 
-Pinmo is the user's private map of places they have been. Each saved record has a local time, a place (name, city, tags) and an optional note. The `pinmo` MCP server gives read-only access through two tools: `list_memory_filters` and `search_memories`.
+Pinmo is the user's private map of places they have been. Each saved record has a local time, a place (name, city, tags) and an optional note. The `pinmo` MCP server reads saved records through two read-only tools: `list_memory_filters` and `search_memories`.
 
 ## Steps
 
@@ -26,7 +26,7 @@ Say which dates and city you searched, then suggest a wider range, the city's ot
 ## Rules
 
 - Use only the `pinmo` server for this. If a call fails, report the failure; do not answer from another server or from memory.
-- The tools are read-only. If the user wants to add, edit or delete a record, say the plugin cannot do that and point them to https://pinmo.me.
+- These tools are read-only. If the user wants to edit or delete a record, say the plugin cannot do that and point them to https://pinmo.me. To note something new, use the note-draft skill.
 - If a call fails with an authorization error (401, `invalid_token`), tell the user to sign in to the `pinmo` server again: in Claude Code run `/mcp` and choose `pinmo`; in Codex run `codex mcp login pinmo`.
 - If a call returns `rate_limited`, tell the user to wait a minute. Do not retry in a loop.
 - The notes are the user's private writing. Do not copy them into files or send them anywhere else unless the user asks.
